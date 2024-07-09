@@ -13,6 +13,7 @@
         justify-content: center;
         height: 100vh;
         margin: 0;
+        padding: 48px;
         background-color: #f4f4f4;
       }
       h1 {
@@ -20,6 +21,7 @@
       }
       .button-container {
         margin-top: 20px;
+        max-width: 800px;
       }
       button {
         margin: 0 10px;
@@ -72,6 +74,16 @@
         margin-top: 20px;
         font-size: 18px;
         color: #333;
+        max-width: 800px;
+        overflow: hidden;
+      }
+
+      .value-display p {
+        margin: 0;
+        padding: 0;
+        /* 文字换行 */
+        white-space: pre-wrap;
+        word-wrap: break-word;
       }
     </style>
     <script src="../dist/index.umd.js"></script>
