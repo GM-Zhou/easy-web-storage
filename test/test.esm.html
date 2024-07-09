@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EasyWebStore 测试（ESM）</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f4f4f4;
+    }
+    h1 {
+      color: #333;
+    }
+    .button-container {
+      margin-top: 20px;
+    }
+    button {
+      margin: 0 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      transition: background-color 0.3s, transform 0.3s;
+    }
+    #setValueButton {
+      background-color: #28a745;
+      color: white;
+    }
+    #setValueButton:hover {
+      background-color: #218838;
+      transform: scale(1.05);
+    }
+    #setValueButton:active {
+      background-color: #1e7e34;
+      transform: scale(0.95);
+    }
+    #getValueButton {
+      background-color: #17a2b8;
+      color: white;
+    }
+    #getValueButton:hover {
+      background-color: #138496;
+      transform: scale(1.05);
+    }
+    #getValueButton:active {
+      background-color: #117a8b;
+      transform: scale(0.95);
+    }
+    #removeValueButton {
+      background-color: #dc3545;
+      color: white;
+    }
+    #removeValueButton:hover {
+      background-color: #c82333;
+      transform: scale(1.05);
+    }
+    #removeValueButton:active {
+      background-color: #bd2130;
+      transform: scale(0.95);
+    }
+    .value-display {
+      margin-top: 20px;
+      font-size: 18px;
+      color: #333;
+    }
+  </style>
+  <script type="module">
+    import EasyWebStore from '../dist/index.esm.js';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const store = new EasyWebStore({
+        type: 'localStorage',
+        key: 'testKey',
+        onChange: (newValue, oldValue) => {
+          console.log('值已更改:', newValue, oldValue);
+          document.getElementById('currentValue').innerText = JSON.stringify(newValue);
+        },
+        onRemove: () => {
+          console.log('值已移除');
+          document.getElementById('currentValue').innerText = 'null';
+        },
+        initialValue: { test: '初始值' }
+      });
+
+      document.getElementById('setValueButton').addEventListener('click', () => {
+        const newValue = { test: '新值' };
+        store.set(newValue);
+      });
+
+      document.getElementById('getValueButton').addEventListener('click', () => {
+        const value = store.get();
+        alert('当前值: ' + JSON.stringify(value));
+      });
+
+      document.getElementById('removeValueButton').addEventListener('click', () => {
+        store.remove();
+      });
+
+      document.getElementById('setValueWithNullButton').addEventListener('click', () => {
+        store.set(null);
+      });
+
+      document.getElementById('setValueWithUndefinedButton').addEventListener('click', () => {
+        store.set(undefined);
+      });
+
+      document.getElementById('setValueWithEmptyObjectButton').addEventListener('click', () => {
+        store.set({});
+      });
+
+      document.getElementById('setValueWithEmptyArrayButton').addEventListener('click', () => {
+        store.set([]);
+      });
+
+      document.getElementById('setValueWithLargeObjectButton').addEventListener('click', () => {
+        const largeObject = {};
+        for (let i = 0; i < 1000; i++) {
+          largeObject[`key${i}`] = `value${i}`;
+        }
+        store.set(largeObject);
+      });
+
+      document.getElementById('setValueWithLargeArrayButton').addEventListener('click', () => {
+        const largeArray = [];
+        for (let i = 0; i < 1000; i++) {
+          largeArray.push(`value${i}`);
+        }
+        store.set(largeArray);
+      });
+
+      document.getElementById('setValueWithSpecialCharactersButton').addEventListener('click', () => {
+        store.set({ test: '特殊字符: !@#$%^&*()_+{}[];\'",./<>?' });
+      });
+
+      // 初始化显示当前值
+      document.getElementById('currentValue').innerText = JSON.stringify(store.get());
+    });
+  </script>
+</head>
+<body>
+  <h1>EasyWebStore 测试（ESM）</h1>
+  <div class="button-container">
+    <button id="setValueButton">设置值</button>
+    <button id="getValueButton">获取值</button>
+    <button id="removeValueButton">移除值</button>
+    <button id="setValueWithNullButton">设置值为 null</button>
+    <button id="setValueWithUndefinedButton">设置值为 undefined</button>
+    <button id="setValueWithEmptyObjectButton">设置值为空对象</button>
+    <button id="setValueWithEmptyArrayButton">设置值为空数组</button>
+    <button id="setValueWithLargeObjectButton">设置值为大对象</button>
+    <button id="setValueWithLargeArrayButton">设置值为大数组</button>
+    <button id="setValueWithSpecialCharactersButton">设置值为特殊字符</button>
+  </div>
+  <div class="value-display">
+    <p>当前值: <span id="currentValue">null</span></p>
+  </div>
+</body>
+</html>
