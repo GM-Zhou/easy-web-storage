@@ -8,6 +8,10 @@ EasyWebStore 是一个用于简化 Web 存储操作的 JavaScript 类。它支�
 
 你可以通过以下方式引入 EasyWebStore：
 
+```bash
+npm install easy-web-store --save
+```
+
 ```javascript
 import EasyWebStore from 'easy-web-store';
 ```
