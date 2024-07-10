@@ -38,7 +38,7 @@ export default class EasyWebStore<T = any, K extends string = string> {
       try {
         return JSON.parse(value == null ? 'null' : value);
       } catch (error) {
-        console.log(error);
+        console.error(error);
         return null;
       }
     }
@@ -54,7 +54,7 @@ export default class EasyWebStore<T = any, K extends string = string> {
           JSON.stringify(value == null || value == 'undefined' ? null : value),
         );
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     }
   };
