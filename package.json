@@ -2,13 +2,25 @@
   "name": "easy-web-storage",
   "version": "1.0.0",
   "description": "",
-  "type": "module",
-  "scripts": {
-    "build": "unbuild"
-  },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "files": [
+    "dist"
+  ],
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsup"
+  },
   "devDependencies": {
     "@eslint/js": "^9.6.0",
     "@rollup/plugin-typescript": "^11.1.6",
@@ -17,7 +29,7 @@
     "prettier": "^3.3.2",
     "rollup": "^4.18.1",
     "tslib": "^2.6.3",
-    "typescript-eslint": "^7.16.0",
-    "unbuild": "^2.0.0"
+    "tsup": "^8.1.0",
+    "typescript-eslint": "^7.16.0"
   }
 }

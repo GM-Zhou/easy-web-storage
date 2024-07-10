@@ -86,55 +86,55 @@
         word-wrap: break-word;
       }
     </style>
-    <script src="../dist/index.umd.js"></script>
+    <script src="../dist/index.global.js"></script>
     <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        const EasyWebStore = window.easyWebStore;
+      document.addEventListener('DOMContentLoaded', () => {
+        const EasyWebStore = window.easyWebStore.default;
         const store = new EasyWebStore({
-          type: "localStorage",
-          key: "testKey",
+          type: 'localStorage',
+          key: 'testKey',
           onChange: (newValue, oldValue) => {
-            console.log("值已更改:", newValue, oldValue);
-            document.getElementById("currentValue").innerText = JSON.stringify(newValue);
+            console.log('值已更改:', newValue, oldValue);
+            document.getElementById('currentValue').innerText = JSON.stringify(newValue);
           },
           onRemove: () => {
-            console.log("值已移除");
-            document.getElementById("currentValue").innerText = "null";
+            console.log('值已移除');
+            document.getElementById('currentValue').innerText = 'null';
           },
-          initialValue: { test: "初始值" },
+          initialValue: { test: '初始值' },
         });
 
-        document.getElementById("setValueButton").addEventListener("click", () => {
-          const newValue = { test: "新值" };
+        document.getElementById('setValueButton').addEventListener('click', () => {
+          const newValue = { test: '新值' };
           store.set(newValue);
         });
 
-        document.getElementById("getValueButton").addEventListener("click", () => {
+        document.getElementById('getValueButton').addEventListener('click', () => {
           const value = store.get();
-          alert("当前值: " + JSON.stringify(value));
+          alert('当前值: ' + JSON.stringify(value));
         });
 
-        document.getElementById("removeValueButton").addEventListener("click", () => {
+        document.getElementById('removeValueButton').addEventListener('click', () => {
           store.remove();
         });
 
-        document.getElementById("setValueWithNullButton").addEventListener("click", () => {
+        document.getElementById('setValueWithNullButton').addEventListener('click', () => {
           store.set(null);
         });
 
-        document.getElementById("setValueWithUndefinedButton").addEventListener("click", () => {
+        document.getElementById('setValueWithUndefinedButton').addEventListener('click', () => {
           store.set(undefined);
         });
 
-        document.getElementById("setValueWithEmptyObjectButton").addEventListener("click", () => {
+        document.getElementById('setValueWithEmptyObjectButton').addEventListener('click', () => {
           store.set({});
         });
 
-        document.getElementById("setValueWithEmptyArrayButton").addEventListener("click", () => {
+        document.getElementById('setValueWithEmptyArrayButton').addEventListener('click', () => {
           store.set([]);
         });
 
-        document.getElementById("setValueWithLargeObjectButton").addEventListener("click", () => {
+        document.getElementById('setValueWithLargeObjectButton').addEventListener('click', () => {
           const largeObject = {};
           for (let i = 0; i < 1000; i++) {
             largeObject[`key${i}`] = `value${i}`;
@@ -142,7 +142,7 @@
           store.set(largeObject);
         });
 
-        document.getElementById("setValueWithLargeArrayButton").addEventListener("click", () => {
+        document.getElementById('setValueWithLargeArrayButton').addEventListener('click', () => {
           const largeArray = [];
           for (let i = 0; i < 1000; i++) {
             largeArray.push(`value${i}`);
@@ -150,12 +150,14 @@
           store.set(largeArray);
         });
 
-        document.getElementById("setValueWithSpecialCharactersButton").addEventListener("click", () => {
-          store.set({ test: "特殊字符: !@#$%^&*()_+{}[];'\",./<>?" });
-        });
+        document
+          .getElementById('setValueWithSpecialCharactersButton')
+          .addEventListener('click', () => {
+            store.set({ test: '特殊字符: !@#$%^&*()_+{}[];\'",./<>?' });
+          });
 
         // 初始化显示当前值
-        document.getElementById("currentValue").innerText = JSON.stringify(store.get());
+        document.getElementById('currentValue').innerText = JSON.stringify(store.get());
       });
     </script>
   </head>

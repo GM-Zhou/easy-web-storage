@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test</title>
+    <style>
+      html {
+        font-size: 22px;
+      }
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 20px;
+        font-size: 1rem;
+      }
+      h1 {
+        color: #333;
+        text-align: center;
+        font-size: 1.7rem;
+      }
+      #keyValueContainer {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        padding: 1.25rem;
+        border-radius: 0.3125rem;
+        margin-top: 1.25rem;
+        font-size: 1rem;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-word;
+      }
+      #keyValueContainer p {
+        margin: 0.625rem 0;
+        color: #555;
+      }
+      p {
+        /* 自动换行 */
+        word-wrap: break-word;
+      }
+    </style>
+    <script>
+      // 模拟 window.webViewModelHandler.queryXimalayaAccessToken 方法
+      // window.webViewModelHandler = {
+      //   queryXimalayaAccessToken: () => {
+      //     // 这里应该是调用实际API获取token的代码
+      //     // 模拟返回一个JSON对象
+      //     return JSON.stringify({
+      //       token: {
+      //         access_token: '986dfbdfea88d8f7fba3308df25f2509',
+      //         expires_in: 7200,
+      //         uid: '264688333',
+      //       },
+      //       userInfo: {
+      //         avatar_url:
+      //           'http://imgopen.xmcdn.com/storages/0f09-audiofreehighqps/89/E3/GKwRIDoGOwyAAACrOwFDDhx_.jpg!op_type\u003d3\u0026columns\u003d110\u0026rows\u003d110',
+      //         id: 264688333,
+      //         is_verified: true,
+      //         is_vip: false,
+      //         kind: 'user',
+      //         nickname: '喜马拉雅长辈频道官方',
+      //         vip_expired_at: 1713974399000,
+      //       },
+      //     });
+      //   },
+      // };
+
+      // 页面加载完成后执行
+      window.onload = () => {
+        // 检测方法是否存在
+        if (!window.webViewModelHandler?.queryXimalayaAccessToken) {
+          alert('queryXimalayaAccessToken 不存在');
+        } else {
+          alert('queryXimalayaAccessToken 方法存在');
+          // 调用 queryXimalayaAccessToken 方法
+          const data = window.webViewModelHandler?.queryXimalayaAccessToken?.();
+          try {
+            const json = JSON.parse(data);
+            displayKeyValue(json);
+          } catch (error) {
+            console.error(error);
+          }
+        }
+      };
+
+      // 显示key-value对
+      function displayKeyValue(json) {
+        const container = document.getElementById('keyValueContainer');
+        Object.keys(json).forEach((key) => {
+          if (typeof json[key] === 'object') displayKeyValue(json[key]);
+          const p = document.createElement('p');
+          p.textContent = key + ': ' + json[key];
+          container.appendChild(p);
+        });
+      }
+    </script>
+  </head>
+  <body>
+    <h1>测试</h1>
+    <p>调用方法</p>
+    <p>window.webViewModelHandler.queryXimalayaAccessToken</p>
+    <div id="keyValueContainer">
+      <!-- key-value 对将被动态插入这里 -->
+    </div>
+  </body>
+</html>
