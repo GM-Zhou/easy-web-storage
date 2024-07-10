@@ -12,15 +12,23 @@ EasyWebStore 是一个用于简化 Web 存储操作的 JavaScript 类。它支�
 npm install easy-web-store --save
 ```
 
-```javascript
-import EasyWebStore from 'easy-web-store';
-```
+## 属性
+
+- store: 存储对象，可以是 localStorage 或 sessionStorage。
+- key: 存储的键名。
+- onChange: 值改变时的回调函数。
+- onRemove: 值被删除时的回调函数。
+- get: 获取存储值的方法。
+- set: 设置存储值的方法。
+- remove: 删除存储值的方法。
 
 ## 使用方法
 
 ### 创建实例
 
 ```javascript
+import EasyWebStore from 'easy-web-store';
+
 const store = new EasyWebStore({
   type: 'localStorage', // 可选值：'localStorage' 或 'sessionStorage'
   key: 'myKey',
@@ -53,22 +61,12 @@ store.set({ foo: 'baz' });
 store.remove();
 ```
 
-## 属性
+### TypeScript
 
-- store: 存储对象，可以是 localStorage 或 sessionStorage。
-- key: 存储的键名。
-- onChange: 值改变时的回调函数。
-- onRemove: 值被删除时的回调函数。
-- get: 获取存储值的方法。
-- set: 设置存储值的方法。
-- remove: 删除存储值的方法。
+```ts
+import EasyWebStore from 'easy-web-store';
 
-## 示例
-
-```javascript
-import EasyWebStore from 'path/to/index.esm.js';
-
-const store = new EasyWebStore({
+const store = new EasyWebStore<{ name: string; age: number }>({
   type: 'localStorage',
   key: 'userInfo',
   onChange: (newValue, oldValue) => {
@@ -91,13 +89,35 @@ store.set({ name: 'Jane Doe', age: 28 });
 store.remove();
 ```
 
+### umd
+
+```html
+<script src="easy-web-store/index.umd.js"></script>
+<script>
+  const EasyWebStore = window.easyWebStore;
+  const store = new EasyWebStore({
+    type: "localStorage",
+    key: "testKey",
+    onChange: (newValue, oldValue) => {
+      console.log("值已更改:", newValue, oldValue);
+      document.getElementById("currentValue").innerText = JSON.stringify(newValue);
+    },
+    onRemove: () => {
+      console.log("值已移除");
+      document.getElementById("currentValue").innerText = "null";
+    },
+    initialValue: { test: "初始值" },
+  });
+</script>
+```
+
 ## 错误处理
 
 如果在操作存储时发生错误，EasyWebStore 会捕获并打印错误信息到控制台。
 
 ## 贡献
 
-欢迎提交 issue 和 pull request 来改进 EasyWebStore。
+欢迎提交 issue 和 pull request 来改进 easy-web-storage
 
 ## 许可证
 
