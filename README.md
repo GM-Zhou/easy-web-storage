@@ -91,7 +91,7 @@ store.remove();
 ### umd
 
 ```html
-<script src="easy-web-store/index.umd.js"></script>
+<script src="easy-web-store/index.global.js"></script>
 <script>
 const EasyWebStore = window.easyWebStore.default;
 const store = new EasyWebStore({
