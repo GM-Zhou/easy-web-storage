@@ -4,10 +4,13 @@ export interface EasyWebStoreOptions<T = any, K extends string = string> {
   initialValue?: T | (() => T);
 }
 
+type onChange<T> = (newValue: T, oldValue: T | null) => void;
+type onRemove<T, K> = (key: K, value: T | null) => void;
+
 export default class EasyWebStore<T = any, K extends string = string> {
   private store: Storage | null;
-  private onChanges: Array<(newValue: T, oldValue: T | null) => void> = [];
-  private onRemoves: Array<(key: K, value: T | null) => void> = [];
+  private onChanges: Array<onChange<T>> = [];
+  private onRemoves: Array<onRemove<T, K>> = [];
   key: K;
 
   constructor(props: EasyWebStoreOptions<T, K>) {
@@ -25,23 +28,22 @@ export default class EasyWebStore<T = any, K extends string = string> {
     }
   }
 
-  onChange(fn: (newValue: T, oldValue: T | null) => void) {
+  onChange(fn: onChange<T>) {
     this.onChanges.push(fn);
   }
 
-  onRemove(fn: (key: K, value: T | null) => void) {
+  onRemove(fn: onRemove<T, K>) {
     this.onRemoves.push(fn);
   }
 
-  get = () => {
-    if (this.store) {
+  get = (): T | null => {
+    if (!this.store) return null;
+    try {
       const value = this.store.getItem(this.key);
-      try {
-        return JSON.parse(value == null ? 'null' : value);
-      } catch (error) {
-        console.error(error);
-        return null;
-      }
+      return JSON.parse(value == null ? 'null' : value);
+    } catch (error) {
+      console.error(error);
+      return null;
     }
   };
 
@@ -61,8 +63,12 @@ export default class EasyWebStore<T = any, K extends string = string> {
 
   remove = () => {
     if (this.store) {
-      this.onRemoves?.forEach((fn) => fn(this.key, this.get()));
-      this.store.removeItem(this.key);
+      try {
+        this.onRemoves?.forEach((fn) => fn(this.key, this.get()));
+        this.store.removeItem(this.key);
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 }
