@@ -14,8 +14,9 @@ const newVersion = version
   .split('.')
   .map((v, i) => (i === 2 ? parseInt(v) + 1 : 0))
   .join('.');
-
+packageJson.version = newVersion;
 writeFileSync('package.json', JSON.stringify(packageJson, null, 2));
+// git commit
 execSync('git add .', { stdio: 'inherit' });
 execSync(`git commit -m "chore: upgrade version to ${newVersion}"`, { stdio: 'inherit' });
 // npm 发布
