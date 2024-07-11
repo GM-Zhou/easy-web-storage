@@ -58,6 +58,8 @@ store.remove();
 
 ### TypeScript
 
+使用泛型或者给 initialValue 传入初始值可以获得更好的类型提示
+
 ```ts
 import EasyWebStore from 'easy-web-store';
 
