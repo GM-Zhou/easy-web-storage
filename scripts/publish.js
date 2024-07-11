@@ -12,7 +12,7 @@ const packageJson = JSON.parse(readFileSync(resolve('package.json'), 'utf-8'));
 const { version } = packageJson;
 const newVersion = version
   .split('.')
-  .map((v, i) => (i === 2 ? parseInt(v) + 1 : 0))
+  .map((v, i) => (i === 2 ? parseInt(v) + 1 : v))
   .join('.');
 packageJson.version = newVersion;
 writeFileSync('package.json', JSON.stringify(packageJson, null, 2));
