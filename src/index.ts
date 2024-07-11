@@ -8,7 +8,7 @@ type onChange<T> = (newValue: T, oldValue: T | null) => void;
 type onRemove<T, K> = (key: K, value: T | null) => void;
 
 export default class EasyWebStore<T = any, K extends string = string> {
-  private store: Storage | null;
+  private store?: Storage;
   private onChanges: Array<onChange<T>> = [];
   private onRemoves: Array<onRemove<T, K>> = [];
   key: K;
@@ -28,13 +28,8 @@ export default class EasyWebStore<T = any, K extends string = string> {
     }
   }
 
-  onChange(fn: onChange<T>) {
-    this.onChanges.push(fn);
-  }
-
-  onRemove(fn: onRemove<T, K>) {
-    this.onRemoves.push(fn);
-  }
+  onChange = (fn: onChange<T>) => this.onChanges.push(fn);
+  onRemove = (fn: onRemove<T, K>) => this.onRemoves.push(fn);
 
   get = (): T | null => {
     if (!this.store) return null;
@@ -50,7 +45,7 @@ export default class EasyWebStore<T = any, K extends string = string> {
   set = (value: T) => {
     if (this.store) {
       try {
-        this.onChanges?.forEach((fn) => fn(value, this.get()));
+        this.onChanges.forEach((fn) => fn(value, this.get()));
         this.store.setItem(
           this.key,
           JSON.stringify(value == null || value == 'undefined' ? null : value),
@@ -64,7 +59,7 @@ export default class EasyWebStore<T = any, K extends string = string> {
   remove = () => {
     if (this.store) {
       try {
-        this.onRemoves?.forEach((fn) => fn(this.key, this.get()));
+        this.onRemoves.forEach((fn) => fn(this.key, this.get()));
         this.store.removeItem(this.key);
       } catch (error) {
         console.error(error);
