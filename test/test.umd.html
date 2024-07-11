@@ -93,16 +93,41 @@
         const store = new EasyWebStore({
           type: 'localStorage',
           key: 'testKey',
-          onChange: (newValue, oldValue) => {
-            console.log('值已更改:', newValue, oldValue);
-            document.getElementById('currentValue').innerText = JSON.stringify(newValue);
-          },
-          onRemove: () => {
-            console.log('值已移除');
-            document.getElementById('currentValue').innerText = 'null';
-          },
           initialValue: { test: '初始值' },
         });
+
+        store.onChange((newValue, oldValue) => {
+          console.log(`${store.key} 已更新`, newValue, oldValue);
+          document.getElementById('currentValue').innerText = JSON.stringify(newValue);
+        });
+
+        store.onRemove((key, value) => {
+          console.log(`${key} 已移除`, value);
+          document.getElementById('currentValue').innerText = 'null';
+        });
+
+        store.onChange((newValue, oldValue) => {
+          console.log(`${store.key} 已更新`, newValue, oldValue);
+          document.getElementById('currentValue').innerText = JSON.stringify(newValue);
+        });
+
+        store.onRemove((key, value) => {
+          console.log(`${key} 已移除`, value);
+          document.getElementById('currentValue').innerText = 'null';
+        });
+
+        // 更新用户信息
+        store.set({
+          name: 'Jane Doe',
+          age: 30,
+        });
+
+        // 获取用户信息
+        const userInfo = store.get();
+        console.log(userInfo); // 输出: { name: 'John Doe', age: 30 }
+
+        // 删除用户信息
+        store.remove();
 
         document.getElementById('setValueButton').addEventListener('click', () => {
           const newValue = { test: '新值' };

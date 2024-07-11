@@ -16,48 +16,43 @@ npm install easy-web-store --save
 
 - store: 存储对象，可以是 localStorage 或 sessionStorage。
 - key: 存储的键名。
-- onChange: 值改变时的回调函数。
-- onRemove: 值被删除时的回调函数。
 - get: 获取存储值的方法。
 - set: 设置存储值的方法。
 - remove: 删除存储值的方法。
+- onChange: 添加值改变时的回调函数，可重复添加。
+- onRemove: 值被删除时的回调函数，可重复添加。
 
 ## 使用方法
 
 ### 创建实例
 
-```javascript
+```js
 import EasyWebStore from 'easy-web-store';
 
 const store = new EasyWebStore({
-  type: 'localStorage', // 可选值：'localStorage' 或 'sessionStorage'
-  key: 'myKey',
-  onChange: (newValue, oldValue) => {
-    console.log('Value changed from', oldValue, 'to', newValue);
-  },
-  onRemove: () => {
-    console.log('Value removed');
-  },
-  initialValue: { foo: 'bar' }
+  type: 'localStorage',
+  key: 'testKey',
+  initialValue: { name: 'Jane Doe', age: 28 },
 });
-```
 
-### 获取存储值
+store.onChange((newValue, oldValue) => {
+  console.log(`${store.key} 已更新, ${oldValue.test} -> ${newValue.test}`);
+  document.getElementById('currentValue').innerText = JSON.stringify(newValue);
+});
 
-```javascript
-const value = store.get();
-console.log(value); // 输出: { foo: 'bar' }
-```
+store.onRemove((key, value) => {
+  console.log(`${key} 已移除`, value.test);
+  document.getElementById('currentValue').innerText = 'null';
+});
 
-### 设置存储值
+// 更新用户信息
+store.set({ name: 'Jane Doe', age: 29 });
 
-```javascript
-store.set({ foo: 'baz' });
-```
+// 获取用户信息
+const userInfo = store.get();
+console.log(userInfo); // 输出: { name: 'John Doe', age: 30 }
 
-### 删除存储值
-
-```javascript
+// 删除用户信息
 store.remove();
 ```
 
@@ -68,22 +63,26 @@ import EasyWebStore from 'easy-web-store';
 
 const store = new EasyWebStore<{ name: string; age: number }>({
   type: 'localStorage',
-  key: 'userInfo',
-  onChange: (newValue, oldValue) => {
-    console.log('User info changed from', oldValue, 'to', newValue);
-  },
-  onRemove: () => {
-    console.log('User info removed');
-  },
-  initialValue: { name: 'John Doe', age: 30 }
+  key: 'testKey',
+  initialValue: { name: 'Jane Doe', age: 29 },
 });
+
+store.onChange((newValue, oldValue) => {
+  console.log(`${store.key} 已更新, ${oldValue.test} -> ${newValue.test}`);
+  document.getElementById('currentValue').innerText = JSON.stringify(newValue);
+});
+
+store.onRemove((key, value) => {
+  console.log(`${key} 已移除`, value.test);
+  document.getElementById('currentValue').innerText = 'null';
+});
+
+// 更新用户信息
+store.set({ name: 'Jane Doe', age: 28 });
 
 // 获取用户信息
 const userInfo = store.get();
 console.log(userInfo); // 输出: { name: 'John Doe', age: 30 }
-
-// 更新用户信息
-store.set({ name: 'Jane Doe', age: 28 });
 
 // 删除用户信息
 store.remove();
@@ -94,22 +93,36 @@ store.remove();
 ```html
 <script src="easy-web-store/index.umd.js"></script>
 <script>
-  const EasyWebStore = window.easyWebStore.default;
-  const store = new EasyWebStore({
-    type: "localStorage",
-    key: "testKey",
-    onChange: (newValue, oldValue) => {
-      console.log("值已更改:", newValue, oldValue);
-      document.getElementById("currentValue").innerText = JSON.stringify(newValue);
-    },
-    onRemove: () => {
-      console.log("值已移除");
-      document.getElementById("currentValue").innerText = "null";
-    },
-    initialValue: { test: "初始值" },
-  });
+const EasyWebStore = window.easyWebStore.default;
+const store = new EasyWebStore({
+  type: 'localStorage',
+  key: 'testKey',
+  initialValue: { name: 'Jane Doe', age: 28 },
+});
+
+store.onChange((newValue, oldValue) => {
+  console.log(`${store.key} 已更新`, newValue, oldValue);
+  document.getElementById('currentValue').innerText = JSON.stringify(newValue);
+});
+
+store.onRemove((key, value) => {
+  console.log(`${key} 已移除`, value);
+  document.getElementById('currentValue').innerText = 'null';
+});
+
+// 更新用户信息
+store.set({
+  name: 'Jane Doe',
+  age: 30,
+});
+
+// 获取用户信息
+const userInfo = store.get();
+console.log(userInfo); // 输出: { name: 'John Doe', age: 30 }
+
+// 删除用户信息
+store.remove();
 </script>
-```
 
 ## 错误处理
 

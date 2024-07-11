@@ -11,6 +11,8 @@ export default [
     rules: {
       // allow any
       '@typescript-eslint/no-explicit-any': 'off',
+      // prefer const
+      'prefer-const': 'error',
     },
   },
 ];

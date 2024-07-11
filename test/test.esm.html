@@ -87,21 +87,23 @@
       }
     </style>
     <script type="module">
-      import EasyWebStore from '../dist/index.js';
+      import EasyWebStore from '../dist/index.mjs';
 
       document.addEventListener('DOMContentLoaded', () => {
         const store = new EasyWebStore({
           type: 'localStorage',
           key: 'testKey',
-          onChange: (newValue, oldValue) => {
-            console.log('值已更改:', newValue, oldValue);
-            document.getElementById('currentValue').innerText = JSON.stringify(newValue);
-          },
-          onRemove: () => {
-            console.log('值已移除');
-            document.getElementById('currentValue').innerText = 'null';
-          },
           initialValue: { test: '初始值' },
+        });
+
+        store.onChange((newValue, oldValue) => {
+          console.log(`${store.key} 已更新, ${oldValue} -> ${newValue}`);
+          document.getElementById('currentValue').innerText = JSON.stringify(newValue);
+        });
+
+        store.onRemove((key, value) => {
+          console.log(`${key} 已移除`, value);
+          document.getElementById('currentValue').innerText = 'null';
         });
 
         document.getElementById('setValueButton').addEventListener('click', () => {
