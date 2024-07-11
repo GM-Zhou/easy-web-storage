@@ -1,9 +1,3 @@
-/*
- * @Description: easy-web-storage
- * @LastEditTime: 2024-07-11 18:51:01
- * @LastEditors: guangmeng.zhou guangmeng.zhou@ximalaya.com
- */
-
 export interface EasyWebStoreOptions<T = any, K extends string = string> {
   type: 'localStorage' | 'sessionStorage';
   key: K;
