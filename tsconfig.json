@@ -8,6 +8,7 @@
       "es2017",
       "esnext.asynciterable"
     ],
+    "noEmit": true,
     "sourceMap": false,
     "strict": true,
     "declaration": true,
@@ -22,6 +23,6 @@
     "removeComments": true
   },
   "include": [
-    "src"
+    "src/**/*",
   ]
 }
