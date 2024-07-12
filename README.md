@@ -2,11 +2,11 @@
 
 ## 简介
 
-EasyWebStore 是一个用于简化 Web 存储操作的 JavaScript 类。它支持 localStorage 和 sessionStorage，并提供了方便的方法来获取、设置和删除存储项。
+EasyWebStorage 是一个用于简化 Web 存储操作的 JavaScript 类。它支持 localStorage 和 sessionStorage，并提供了方便的方法来获取、设置和删除存储项。
 
 ## 安装
 
-你可以通过以下方式引入 EasyWebStore：
+你可以通过以下方式引入 EasyWebStorage：
 
 ```bash
 npm install @zhou-gm/easy-web-storage --save
@@ -27,9 +27,9 @@ npm install @zhou-gm/easy-web-storage --save
 ### 创建实例
 
 ```js
-import EasyWebStore from '@zhou-gm/easy-web-storage';
+import EasyWebStorage from '@zhou-gm/easy-web-storage';
 
-const store = new EasyWebStore({
+const store = new EasyWebStorage({
   type: 'localStorage',
   key: 'testKey',
   initialValue: { name: 'Jane Doe', age: 28 },
@@ -61,9 +61,9 @@ store.remove();
 使用泛型或者给 initialValue 传入初始值可以获得更好的类型提示
 
 ```ts
-import EasyWebStore from '@zhou-gm/easy-web-storage';
+import EasyWebStorage from '@zhou-gm/easy-web-storage';
 
-const store = new EasyWebStore<{ name: string; age: number }>({
+const store = new EasyWebStorage<{ name: string; age: number }>({
   type: 'localStorage',
   key: 'testKey',
   initialValue: { name: 'Jane Doe', age: 29 },
@@ -74,8 +74,8 @@ store.onChange((newValue, oldValue) => {
   document.getElementById('currentValue').innerText = JSON.stringify(newValue);
 });
 
-store.onRemove((key, value) => {
-  console.log(`${key} 已移除`, value.test);
+store.onRemove((key, oldValue) => {
+  console.log(`${key} 已移除`, oldValue.test);
   document.getElementById('currentValue').innerText = 'null';
 });
 
@@ -95,8 +95,8 @@ store.remove();
 ```html
 <script src="@zhou-gm/easy-web-storage/index.global.js"></script>
 <script>
-const EasyWebStore = window.easyWebStore.default;
-const store = new EasyWebStore({
+const EasyWebStorage = window.EasyWebStorage.default;
+const store = new EasyWebStorage({
   type: 'localStorage',
   key: 'testKey',
   initialValue: { name: 'Jane Doe', age: 28 },
@@ -107,8 +107,8 @@ store.onChange((newValue, oldValue) => {
   document.getElementById('currentValue').innerText = JSON.stringify(newValue);
 });
 
-store.onRemove((key, value) => {
-  console.log(`${key} 已移除`, value);
+store.onRemove((key, oldValue) => {
+  console.log(`${key} 已移除`, oldValue);
   document.getElementById('currentValue').innerText = 'null';
 });
 
@@ -129,7 +129,7 @@ store.remove();
 
 ## 错误处理
 
-如果在操作存储时发生错误，EasyWebStore 会捕获并打印错误信息到控制台。
+如果在操作存储时发生错误，EasyWebStorage 会捕获并打印错误信息到控制台。
 
 ## 贡献
 
