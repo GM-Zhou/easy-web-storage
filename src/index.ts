@@ -18,7 +18,7 @@ export default class EasyWebStore<T = any, K extends string = string> {
     this.store = type === 'localStorage' ? window.localStorage : window.sessionStorage;
     this.key = key;
 
-    if (this.store && initialValue !== undefined) {
+    if (this.store && initialValue != null) {
       try {
         const value = typeof initialValue === 'function' ? (initialValue as any)() : initialValue;
         this.set(value);
