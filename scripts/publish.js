@@ -25,3 +25,6 @@ execSync(`git commit -m "chore: upgrade version to ${newVersion}"`, { stdio: 'in
 execSync(`npm publish --registry https://registry.npmjs.org --no-git-checks --access public`, {
   stdio: 'inherit',
 });
+
+// 上传 git
+execSync('git push', { stdio: 'inherit' });
