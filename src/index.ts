@@ -5,7 +5,7 @@ export interface EasyWebStoreOptions<T = any, K extends string = string> {
 }
 
 type onChange<T> = (newValue: T, oldValue: T | null) => void;
-type onRemove<T, K> = (key: K, value: T | null) => void;
+type onRemove<T, K> = (key: K, oldValue: T | null) => void;
 
 export default class EasyWebStore<T = any, K extends string = string> {
   private store?: Storage;
