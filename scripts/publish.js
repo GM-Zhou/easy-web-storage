@@ -16,9 +16,11 @@ const newVersion = version
   .join('.');
 packageJson.version = newVersion;
 writeFileSync('package.json', JSON.stringify(packageJson, null, 2));
+
 // git commit
 execSync('git add .', { stdio: 'inherit' });
 execSync(`git commit -m "chore: upgrade version to ${newVersion}"`, { stdio: 'inherit' });
+
 // npm 发布
 execSync(`npm publish --registry https://registry.npmjs.org --no-git-checks --access public`, {
   stdio: 'inherit',
