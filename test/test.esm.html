@@ -87,11 +87,11 @@
       }
     </style>
     <script type="module">
-      import EasyWebStore from '../dist/index.mjs';
+      import EasyWebStore from '../dist/index.js';
 
       document.addEventListener('DOMContentLoaded', () => {
         const store = new EasyWebStore({
-          type: 'localStorage',
+          storage: 'localStorage',
           key: 'testKey',
           initialValue: { test: '初始值' },
         });

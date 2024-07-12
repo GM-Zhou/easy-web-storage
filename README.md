@@ -30,7 +30,7 @@ npm install @zhou-gm/easy-web-storage --save
 import EasyWebStorage from '@zhou-gm/easy-web-storage';
 
 const store = new EasyWebStorage({
-  type: 'localStorage',
+  storage: 'localStorage',
   key: 'testKey',
   initialValue: { name: 'Jane Doe', age: 28 },
 });
@@ -64,7 +64,7 @@ store.remove();
 import EasyWebStorage from '@zhou-gm/easy-web-storage';
 
 const store = new EasyWebStorage<{ name: string; age: number }>({
-  type: 'localStorage',
+  storage: 'localStorage',
   key: 'testKey',
   initialValue: { name: 'Jane Doe', age: 29 },
 });
@@ -97,7 +97,7 @@ store.remove();
 <script>
 const EasyWebStorage = window.EasyWebStorage.default;
 const store = new EasyWebStorage({
-  type: 'localStorage',
+  storage: 'localStorage',
   key: 'testKey',
   initialValue: { name: 'Jane Doe', age: 28 },
 });

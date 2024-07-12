@@ -1,5 +1,5 @@
 export interface EasyWebStorageOptions<T = any, K extends string = string> {
-  type: 'localStorage' | 'sessionStorage';
+  storage: 'localStorage' | 'sessionStorage';
   key: K;
   initialValue?: T | (() => T);
 }
@@ -8,17 +8,17 @@ type onChange<T> = (newValue: T, oldValue: T | null) => void;
 type onRemove<T, K> = (key: K, oldValue: T | null) => void;
 
 export default class EasyWebStorage<T = any, K extends string = string> {
-  private store?: Storage;
+  private storage?: Storage;
   private onChanges: Array<onChange<T>> = [];
   private onRemoves: Array<onRemove<T, K>> = [];
   key: K;
 
   constructor(props: EasyWebStorageOptions<T, K>) {
-    const { type, key, initialValue } = props;
-    this.store = type === 'localStorage' ? window.localStorage : window.sessionStorage;
+    const { storage, key, initialValue } = props;
+    this.storage = storage === 'localStorage' ? window.localStorage : window.sessionStorage;
     this.key = key;
 
-    if (this.store && initialValue != null) {
+    if (this.storage && initialValue != null) {
       try {
         const value = typeof initialValue === 'function' ? (initialValue as any)() : initialValue;
         this.set(value);
@@ -32,9 +32,9 @@ export default class EasyWebStorage<T = any, K extends string = string> {
   onRemove = (fn: onRemove<T, K>) => this.onRemoves.push(fn);
 
   get = (): T | null => {
-    if (!this.store) return null;
+    if (!this.storage) return null;
     try {
-      const value = this.store.getItem(this.key);
+      const value = this.storage.getItem(this.key);
       return JSON.parse(value == null ? 'null' : value);
     } catch (error) {
       console.error(error);
@@ -43,10 +43,10 @@ export default class EasyWebStorage<T = any, K extends string = string> {
   };
 
   set = (value: T) => {
-    if (this.store) {
+    if (this.storage) {
       try {
         this.onChanges.forEach((fn) => fn(value, this.get()));
-        this.store.setItem(
+        this.storage.setItem(
           this.key,
           JSON.stringify(value == null || value == 'undefined' ? null : value),
         );
@@ -57,10 +57,10 @@ export default class EasyWebStorage<T = any, K extends string = string> {
   };
 
   remove = () => {
-    if (this.store) {
+    if (this.storage) {
       try {
         this.onRemoves.forEach((fn) => fn(this.key, this.get()));
-        this.store.removeItem(this.key);
+        this.storage.removeItem(this.key);
       } catch (error) {
         console.error(error);
       }

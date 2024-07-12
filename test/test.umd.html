@@ -91,7 +91,7 @@
       document.addEventListener('DOMContentLoaded', () => {
         const EasyWebStore = window.easyWebStore.default;
         const store = new EasyWebStore({
-          type: 'localStorage',
+          storage: 'localStorage',
           key: 'testKey',
           initialValue: { test: '初始值' },
         });
