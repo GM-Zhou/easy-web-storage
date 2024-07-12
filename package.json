@@ -1,9 +1,14 @@
 {
   "name": "@zhou-gm/easy-web-storage",
   "private": false,
-  "version": "1.0.5",
-  "description": "",
-  "keywords": [],
+  "version": "1.0.6",
+  "description": "make web storage more manageable",
+  "keywords": [
+    "localStorage",
+    "sessionStorage",
+    "typescript",
+    "javascript"
+  ],
   "author": "",
   "license": "ISC",
   "homepage": "https://github.com/GM-Zhou/easy-web-storage",
