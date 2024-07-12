@@ -9,7 +9,7 @@ EasyWebStore 是一个用于简化 Web 存储操作的 JavaScript 类。它支�
 你可以通过以下方式引入 EasyWebStore：
 
 ```bash
-npm install easy-web-store --save
+npm install @zhou-gm/easy-web-storage --save
 ```
 
 ## 属性
@@ -27,7 +27,7 @@ npm install easy-web-store --save
 ### 创建实例
 
 ```js
-import EasyWebStore from 'easy-web-store';
+import EasyWebStore from '@zhou-gm/easy-web-storage';
 
 const store = new EasyWebStore({
   type: 'localStorage',
@@ -61,7 +61,7 @@ store.remove();
 使用泛型或者给 initialValue 传入初始值可以获得更好的类型提示
 
 ```ts
-import EasyWebStore from 'easy-web-store';
+import EasyWebStore from '@zhou-gm/easy-web-storage';
 
 const store = new EasyWebStore<{ name: string; age: number }>({
   type: 'localStorage',
@@ -93,7 +93,7 @@ store.remove();
 ### umd
 
 ```html
-<script src="easy-web-store/index.global.js"></script>
+<script src="@zhou-gm/easy-web-storage/index.global.js"></script>
 <script>
 const EasyWebStore = window.easyWebStore.default;
 const store = new EasyWebStore({

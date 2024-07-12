@@ -1,4 +1,4 @@
-export interface EasyWebStoreOptions<T = any, K extends string = string> {
+export interface EasyWebStorageOptions<T = any, K extends string = string> {
   type: 'localStorage' | 'sessionStorage';
   key: K;
   initialValue?: T | (() => T);
@@ -7,13 +7,13 @@ export interface EasyWebStoreOptions<T = any, K extends string = string> {
 type onChange<T> = (newValue: T, oldValue: T | null) => void;
 type onRemove<T, K> = (key: K, oldValue: T | null) => void;
 
-export default class EasyWebStore<T = any, K extends string = string> {
+export default class EasyWebStorage<T = any, K extends string = string> {
   private store?: Storage;
   private onChanges: Array<onChange<T>> = [];
   private onRemoves: Array<onRemove<T, K>> = [];
   key: K;
 
-  constructor(props: EasyWebStoreOptions<T, K>) {
+  constructor(props: EasyWebStorageOptions<T, K>) {
     const { type, key, initialValue } = props;
     this.store = type === 'localStorage' ? window.localStorage : window.sessionStorage;
     this.key = key;
