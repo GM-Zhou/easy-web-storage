@@ -1,7 +1,7 @@
 {
   "name": "@zhou-gm/easy-web-storage",
   "private": false,
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "make web storage more manageable",
   "keywords": [
     "localStorage",

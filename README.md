@@ -125,6 +125,7 @@ console.log(userInfo); // 输出: { name: 'John Doe', age: 30 }
 // 删除用户信息
 store.remove();
 </script>
+```
 
 ## 错误处理
 
@@ -133,7 +134,3 @@ store.remove();
 ## 贡献
 
 欢迎提交 issue 和 pull request 来改进 easy-web-storage
-
-## 许可证
-
-MIT
