@@ -20,5 +20,8 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "removeComments": true
-  }
+  },
+  "include": [
+    "src"
+  ]
 }
