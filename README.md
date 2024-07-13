@@ -14,7 +14,7 @@ npm install @zhou-gm/easy-web-storage --save
 
 ## 属性
 
-- store: 存储对象，可以是 localStorage 或 sessionStorage。
+- storage: 存储对象，可以是 localStorage 或 sessionStorage。
 - key: 存储的键名。
 - get: 获取存储值的方法。
 - set: 设置存储值的方法。
