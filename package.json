@@ -1,7 +1,7 @@
 {
   "name": "@zhou-gm/easy-web-storage",
   "private": false,
-  "version": "1.0.13",
+  "version": "1.0.14",
   "description": "make web storage more manageable",
   "keywords": [
     "localStorage",
@@ -20,7 +20,7 @@
     "dist"
   ],
   "type": "module",
-  "main": "dist/index.js",
+  "main": "dist/index.cjs",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
