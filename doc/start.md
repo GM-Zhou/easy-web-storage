@@ -183,6 +183,7 @@ export default defineConfig({
 -- index.d.ts
 -- index.global.js
 -- index.js
+1
 
 ## 5. 配置 package.json
 
