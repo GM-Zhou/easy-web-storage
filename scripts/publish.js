@@ -3,8 +3,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 // 如果检查未通过，则退出
-const checkWorker = execSync('pnpm tsc && pnpm build', { stdio: 'inherit' });
-if (checkWorker) process.exit(1);
+execSync('pnpm tsc && pnpm build', { stdio: 'inherit' });
 
 // 升级 package.json
 const packageJson = JSON.parse(readFileSync(resolve('package.json'), 'utf-8'));

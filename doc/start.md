@@ -192,7 +192,7 @@ export default defineConfig({
 {
   "name": "@zhou-gm/easy-web-storage",
   "private": false,
-  "version": "1.0.15",
+  "version": "1.0.16",
   "description": "make web storage more manageable",
   "keywords": [
     "localStorage",
@@ -205,19 +205,17 @@ export default defineConfig({
   "homepage": "https://github.com/GM-Zhou/easy-web-storage",
   "repository": {
     "type": "git",
-    "url": "https://github.com/GM-Zhou/easy-web-storage"
+    "url": "git+https://github.com/GM-Zhou/easy-web-storage.git"
   },
   "files": [
     "dist"
   ],
   "type": "module",
-  "main": "dist/index.cjs",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
       "import": "./dist/index.js",
-      "require": "./dist/index.cjs",
       "types": "./dist/index.d.ts"
     }
   },
@@ -261,5 +259,56 @@ test/test.iife.html 同理，然后使用 vscode 插件`Live Server`启动 html�
 首先在命令行查看 npm 是否登录
 
 ```bash
-npm whoami
+npm whoami --registry https://registry.npmjs.org
 ```
+
+后缀 --registry <https://registry.npmjs.org> 是为了防止本地修改过 npm 源
+
+如果显示结果为你的 npm 用户名，则进行下一步，否则使用 npm login 命令登录
+
+**登录成功后，我们便可以使用 npm publish 进行发布了，但是为了后续发布的便利，我们还需要用 node 写一些自动化的脚本来辅助发布：**
+
+新建 scripts/publish.js
+
+```js
+import { execSync } from 'node:child_process';
+import { readFileSync, writeFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+
+// 如果检查未通过，则退出
+const checkWorker = execSync('pnpm tsc && pnpm build', { stdio: 'inherit' });
+if (checkWorker) process.exit(1);
+
+// 升级 package.json
+const packageJson = JSON.parse(readFileSync(resolve('package.json'), 'utf-8'));
+const { version } = packageJson;
+const newVersion = version
+  .split('.')
+  .map((v, i) => (i === 2 ? parseInt(v) + 1 : v))
+  .join('.');
+packageJson.version = newVersion;
+writeFileSync('package.json', JSON.stringify(packageJson, null, 2));
+
+// git commit
+execSync('git add .', { stdio: 'inherit' });
+execSync(`git commit -m "chore: upgrade version to ${newVersion}"`, { stdio: 'inherit' });
+
+// npm 发布
+execSync(`npm publish --registry https://registry.npmjs.org --no-git-checks --access public`, {
+  stdio: 'inherit',
+});
+
+// 上传 git
+execSync('git push', { stdio: 'inherit' });
+```
+
+脚本比较简单，大致流程为：
+
+- 使用 tsc 检查代码
+- 修改 package.json 的版本号
+- git 保存代码
+- npm publish
+  - --registry 参数以防止本地替换过 npm 源
+  - --no-git-checks 防止 npm 因为 git 仓库没有保存提交而报错
+  - --access public：当包名使用组织前缀时，发布需要带上这个参数
+- git push

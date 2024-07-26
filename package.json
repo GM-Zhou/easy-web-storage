@@ -1,7 +1,7 @@
 {
   "name": "@zhou-gm/easy-web-storage",
   "private": false,
-  "version": "1.0.16",
+  "version": "1.0.17",
   "description": "make web storage more manageable",
   "keywords": [
     "localStorage",
@@ -14,7 +14,7 @@
   "homepage": "https://github.com/GM-Zhou/easy-web-storage",
   "repository": {
     "type": "git",
-    "url": "https://github.com/GM-Zhou/easy-web-storage"
+    "url": "git+https://github.com/GM-Zhou/easy-web-storage.git"
   },
   "files": [
     "dist"
