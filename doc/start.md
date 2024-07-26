@@ -129,6 +129,7 @@ export default class EasyWebStorage<T = any, K extends string = string> {
 ```
 
 **代码逻辑比较简单：**
+
 将原本 localStorage/sessionStorage .set/.get 的数据管理方式，改为原子化的方式
 
 支持 TS 泛型，自动处理存取值错误，并能够为它动态添加多个副作用
@@ -256,13 +257,10 @@ exports 字段提供了更细粒度的导出控制，这里按照默认的 . 路
 ## 6. 编写测试文件
 
 因为 easy-web-storage 的宿主环境为浏览器，并且功能较为简单，所以编写 html 作为测试文件
-
 新建 test/test.esm.html，用于测试 esm 格式
-
 新建 test/test.iife.html，用于测试 iife 格式
 
 **此时可以找 [kimi](https://kimi.moonshot.cn/) 帮忙：**
-
 将 dist 目录下的 index.js 上传，然后让它根据文件生成一份详细且美观的 html 测试代码，生成后复制代码到 test/test.esm.html，将引入的 js 文件路径改为 dist/index.js
 
 test/test.iife.html 同理，然后使用 vscode 插件`Live Server`启动 html，，再进行一些微调即可
