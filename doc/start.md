@@ -237,6 +237,7 @@ export default defineConfig({
 ```
 
 **其中：**
+name 使用`@zhou-gm`组织前缀，可以防止重名，但是需要在 npm 中新建一个组织
 private: false 代表可以发布到 npm，否则 npm 将拒绝发布
 files: ['dist'] 代表上传 npm 时，只上传 dist 目录
 main: 'dist/index.cjs' 代表使用 commonjs 引入该项目时的入口
@@ -317,4 +318,9 @@ execSync('git push', { stdio: 'inherit' });
 
 ## 8. 总结
 
-至此，一个简单的前端工具库就大功告成了，
+至此，一个简单的前端工具库就大功告成了
+
+虽然实现的功能较为简单，但是在从 0 到 1 的过程中，我温故而知新，对 web storage，错误捕获和处理，观察者模式，tsconfig.json，package.json，node 等又有了更多的认识和思考
+
+如果这篇文章对你有帮助，请给我的 git 一个 star 吧，谢谢！
+<https://github.com/GM-Zhou/easy-web-storage>
