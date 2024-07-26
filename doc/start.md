@@ -1,0 +1,265 @@
+
+# 开始
+
+本篇文章中，我将给大家展示如何从 0 到 1，构建自己的前端工具库，包括从创建项目到打包发布到 npm。本文的示例项目仓库为 [easy-web-storage](https://github.com/GM-Zhou/easy-web-storage)
+
+## 1. 梳理需求
+
+最好是针对现有业务的一些小的痛点，这里以 easy-web-storage 为例：
+
+- storage 中存在多个字段，需要更集中的管理
+- storage 中的字段更新时，需要添加一些副作用
+- storage 存取值时的错误处理和格式转换
+
+## 2. 创建项目
+
+- 新建文件夹 easy-web-storage，并使用 pnpm init 初始化
+- 安装依赖
+  - ts 语言支持`pnpm i -D typescript`
+  - tsup 打包工具 `pnpm i -D tsup tslib`
+- 新建 src/index.ts 作为入口文件
+- 将 package.json 中的`type`值改为`"module"`，以支持 ESM 形式的导入导出
+- 使用`pnpx tsconfig.json`创建`tsconfig.json`，选择默认的 node 模板，然后修改一下
+
+```json
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "module": "ESNext",
+    "lib": [
+      "dom",
+      "es6",
+      "es2017",
+      "esnext.asynciterable"
+    ],
+    "noEmit": true, // tsc 仅检查，不生成 js 文件
+    "sourceMap": false,
+    "strict": true,
+    "declaration": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "removeComments": true
+  },
+  "include": [
+    "src/**/*",
+  ]
+}
+```
+
+## 3. 编写代码
+
+在 src/index.ts 中编写需求代码
+
+```typescript
+export interface EasyWebStorageOptions<T = any, K extends string = string> {
+  storage: 'localStorage' | 'sessionStorage';
+  key: K;
+  initialValue?: T | (() => T); 
+}
+
+type onChange<T> = (newValue: T, oldValue: T | null) => void;
+type onRemove<T, K> = (key: K, oldValue: T | null) => void;
+
+export default class EasyWebStorage<T = any, K extends string = string> {
+  private storage?: Storage;
+  private onChanges: Array<onChange<T>> = [];
+  private onRemoves: Array<onRemove<T, K>> = [];
+  key: K;
+
+  constructor(props: EasyWebStorageOptions<T, K>) {
+    const { storage, key, initialValue } = props;
+    this.storage = storage === 'localStorage' ? window.localStorage : window.sessionStorage;
+    this.key = key;
+
+    if (this.storage && initialValue != null) {
+      try {
+        const value = typeof initialValue === 'function' ? (initialValue as any)() : initialValue;
+        this.set(value);
+      } catch (error) {
+        console.error(`Error initializing value for key ${this.key}:`, error);
+      }
+    }
+  }
+
+  onChange = (fn: onChange<T>) => this.onChanges.push(fn);
+  onRemove = (fn: onRemove<T, K>) => this.onRemoves.push(fn);
+
+  get = (): T | null => {
+    if (!this.storage) return null;
+    try {
+      const value = this.storage.getItem(this.key);
+      return JSON.parse(value == null ? 'null' : value);
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  };
+
+  set = (value: T) => {
+    if (this.storage) {
+      try {
+        this.onChanges.forEach((fn) => fn(value, this.get()));
+        this.storage.setItem(
+          this.key,
+          JSON.stringify(value == null || value == 'undefined' ? null : value),
+        );
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
+  remove = () => {
+    if (this.storage) {
+      try {
+        this.onRemoves.forEach((fn) => fn(this.key, this.get()));
+        this.storage.removeItem(this.key);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+}
+```
+
+**代码逻辑比较简单：**
+将原本 localStorage/sessionStorage .set/.get 的数据管理方式，改为原子化的方式
+支持 TS 泛型，自动处理存取值错误，并能够为它动态添加多个副作用
+
+**例如：**
+
+```ts
+const userStore = new EasyWebStorage({
+  storage: 'localStorage',
+  key: 'user',
+  initialValue: {
+    name: 'zhangsan',
+    age: 18
+  }
+})
+
+const user = userStore.get();
+
+userStore.onChange((newValue, oldValue) => {
+  console.log(`${userStore.key} 已更新, ${oldValue.test} -> ${newValue.test}`);
+})
+userStore.onChange((newValue, oldValue) => {
+  console.log('添加的第二个副作用');
+})
+
+user.set({ name: 'lisi', age: 19 });
+```
+
+## 4. 使用 tsup 打包
+
+> tsup 是基于 esbuild 开发的一个新型打包工具（比 rollup 还新）。内置了 TypeScript 支持，零配置、开箱即用，帮助你高效创建现代 TypeScript/JavaScript 库
+
+[tsup 仓库地址](https://github.com/egoist/tsup)
+
+- 新建 tsup.config.ts 文件
+
+```ts
+import { defineConfig } from 'tsup';
+
+export default defineConfig({
+  entry: ['src/index.ts'], // 入口
+  outDir: 'dist', // 打包输出目录
+  clean: true, // 每次打包前清空目录
+  format: ['esm', 'cjs', 'iife'], // 打包格式，iife 支持 script 标签直接引入
+  globalName: 'easyWebStore', // iife 模式下的全局变量名
+  dts: true, // 输出 d.ts 文件
+  minify: true, // 压缩代码
+});
+
+```
+
+使用 pnpm tsup 打包后，可以看到 dist 目录结构
+-- index.d.ts
+-- index.global.js
+-- index.js
+
+## 5. 配置 package.json
+
+根据项目需要和打包结果进行配置
+
+```json
+{
+  "name": "@zhou-gm/easy-web-storage",
+  "private": false,
+  "version": "1.0.15",
+  "description": "make web storage more manageable",
+  "keywords": [
+    "localStorage",
+    "sessionStorage",
+    "typescript",
+    "javascript"
+  ],
+  "author": "",
+  "license": "ISC",
+  "homepage": "https://github.com/GM-Zhou/easy-web-storage",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GM-Zhou/easy-web-storage"
+  },
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "pub": "node ./scripts/publish.js"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.6.0",
+    "eslint": "^9.6.0",
+    "globals": "^15.8.0",
+    "prettier": "^3.3.2",
+    "tslib": "^2.6.3",
+    "tsup": "^8.1.0",
+    "typescript": "^5.5.3",
+    "typescript-eslint": "^7.16.0"
+  }
+}
+```
+
+**其中：**
+private: false 代表可以发布到 npm，否则 npm 将拒绝发布
+files: ['dist'] 代表上传 npm 时，只上传 dist 目录
+main: 'dist/index.cjs' 代表使用 commonjs 引入该项目时的入口
+module: 'dist/index.js' 代表使用 esm 引入该项目时的入口
+types: 'dist/index.d.ts' 代表类型文件入口
+exports 字段提供了更细粒度的导出控制，这里按照默认的 . 路径来写
+
+## 6. 编写测试文件
+
+因为 easy-web-storage 的宿主环境位浏览器，并且功能较为简单，所以编写 html 作为测试文件
+新建 test/test.esm.html，用于测试 esm 格式
+新建 test/test.iife.html，用于测试 iife 格式
+
+**此时可以找 [kimi](https://kimi.moonshot.cn/) 帮忙：**
+将 dist 目录下的 index.js 上传，然后让它根据文件生成一份详细且美观的 html 测试代码，生成后复制代码到 test/test.esm.html，将引入的 js 文件路径改为 dist/index.js
+test/test.iife.html 同理，然后使用 vscode 插件`Live Server`启动 html，，再进行一些微调即可
+
+## 7. 发布 npm
+
+首先在命令行查看 npm 是否登录
+
+```bash
+npm whoami
+```

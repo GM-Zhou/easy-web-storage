@@ -8,8 +8,7 @@
       "es2017",
       "esnext.asynciterable"
     ],
-    // tsc 仅检查，不生成 js 文件
-    "noEmit": true,
+    "noEmit": true, // tsc 仅检查，不生成 js 文件
     "sourceMap": false,
     "strict": true,
     "declaration": true,

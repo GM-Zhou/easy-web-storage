@@ -4,7 +4,7 @@ export default defineConfig({
   entry: ['src/index.ts'],
   outDir: 'dist',
   clean: true,
-  format: ['esm', 'cjs', 'iife'],
+  format: ['esm', 'iife'],
   globalName: 'easyWebStore',
   dts: true,
   minify: true,
