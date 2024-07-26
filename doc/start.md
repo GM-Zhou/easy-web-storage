@@ -130,6 +130,7 @@ export default class EasyWebStorage<T = any, K extends string = string> {
 
 **代码逻辑比较简单：**
 将原本 localStorage/sessionStorage .set/.get 的数据管理方式，改为原子化的方式
+
 支持 TS 泛型，自动处理存取值错误，并能够为它动态添加多个副作用
 
 **例如：**
@@ -171,7 +172,7 @@ export default defineConfig({
   entry: ['src/index.ts'], // 入口
   outDir: 'dist', // 打包输出目录
   clean: true, // 每次打包前清空目录
-  format: ['esm', 'cjs', 'iife'], // 打包格式，iife 支持 script 标签直接引入
+  format: ['esm', 'iife'], // 打包格式，iife 支持 script 标签直接引入
   globalName: 'easyWebStore', // iife 模式下的全局变量名
   dts: true, // 输出 d.ts 文件
   minify: true, // 压缩代码
@@ -183,7 +184,6 @@ export default defineConfig({
 -- index.d.ts
 -- index.global.js
 -- index.js
-1
 
 ## 5. 配置 package.json
 
@@ -238,22 +238,33 @@ export default defineConfig({
 ```
 
 **其中：**
+
 name 使用`@zhou-gm`组织前缀，可以防止重名，但是需要在 npm 中新建一个组织
+
 private: false 代表可以发布到 npm，否则 npm 将拒绝发布
+
 files: ['dist'] 代表上传 npm 时，只上传 dist 目录
+
 main: 'dist/index.cjs' 代表使用 commonjs 引入该项目时的入口
+
 module: 'dist/index.js' 代表使用 esm 引入该项目时的入口
+
 types: 'dist/index.d.ts' 代表类型文件入口
+
 exports 字段提供了更细粒度的导出控制，这里按照默认的 . 路径来写
 
 ## 6. 编写测试文件
 
-因为 easy-web-storage 的宿主环境位浏览器，并且功能较为简单，所以编写 html 作为测试文件
+因为 easy-web-storage 的宿主环境为浏览器，并且功能较为简单，所以编写 html 作为测试文件
+
 新建 test/test.esm.html，用于测试 esm 格式
+
 新建 test/test.iife.html，用于测试 iife 格式
 
 **此时可以找 [kimi](https://kimi.moonshot.cn/) 帮忙：**
+
 将 dist 目录下的 index.js 上传，然后让它根据文件生成一份详细且美观的 html 测试代码，生成后复制代码到 test/test.esm.html，将引入的 js 文件路径改为 dist/index.js
+
 test/test.iife.html 同理，然后使用 vscode 插件`Live Server`启动 html，，再进行一些微调即可
 
 ## 7. 发布 npm
@@ -323,5 +334,5 @@ execSync('git push', { stdio: 'inherit' });
 
 虽然实现的功能较为简单，但是在从 0 到 1 的过程中，我温故而知新，对 web storage，错误捕获和处理，观察者模式，tsconfig.json，package.json，node 等又有了更多的认识和思考
 
-如果这篇文章对你有帮助，请给我的 git 一个 star 吧，谢谢！
+如果这篇文章对你有帮助，请给我一个 star 吧，谢谢！
 <https://github.com/GM-Zhou/easy-web-storage>
