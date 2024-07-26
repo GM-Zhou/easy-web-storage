@@ -1,7 +1,7 @@
 
 # 开始
 
-本篇文章中，我将给大家展示如何从 0 到 1，构建自己的前端工具库，包括从创建项目到打包发布到 npm。本文的示例项目仓库为 [easy-web-storage](https://github.com/GM-Zhou/easy-web-storage)
+> 本篇文章中，我将给大家展示如何从 0 到 1，构建自己的前端工具库，包括从创建项目到打包发布到 npm。本文的示例项目仓库为 [easy-web-storage](https://github.com/GM-Zhou/easy-web-storage)
 
 ## 1. 梳理需求
 
@@ -312,3 +312,9 @@ execSync('git push', { stdio: 'inherit' });
   - --no-git-checks 防止 npm 因为 git 仓库没有保存提交而报错
   - --access public：当包名使用组织前缀时，发布需要带上这个参数
 - git push
+
+脚本编写完成后，就可以正常使用 pnpm pub 命令发布了
+
+## 8. 总结
+
+至此，一个简单的前端工具库就大功告成了，
