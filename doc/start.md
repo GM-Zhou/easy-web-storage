@@ -263,7 +263,7 @@ exports 字段提供了更细粒度的导出控制，这里按照默认的 . 路
 **此时可以找 [kimi](https://kimi.moonshot.cn/) 帮忙：**
 将 dist 目录下的 index.js 上传，然后让它根据文件生成一份详细且美观的 html 测试代码，生成后复制代码到 test/test.esm.html，将引入的 js 文件路径改为 dist/index.js
 
-test/test.iife.html 同理，然后使用 vscode 插件`Live Server`启动 html，，再进行一些微调即可
+test/test.iife.html 同理，然后使用 vscode 插件`Live Server`启动 html，再进行一些微调即可
 
 ## 7. 发布 npm
 
@@ -286,9 +286,8 @@ import { execSync } from 'node:child_process';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
-// 如果检查未通过，则退出
+// 使用 tsc 检查，通过后才会进行打包
 const checkWorker = execSync('pnpm tsc && pnpm build', { stdio: 'inherit' });
-if (checkWorker) process.exit(1);
 
 // 升级 package.json
 const packageJson = JSON.parse(readFileSync(resolve('package.json'), 'utf-8'));
@@ -332,5 +331,5 @@ execSync('git push', { stdio: 'inherit' });
 
 虽然实现的功能较为简单，但是在从 0 到 1 的过程中，我温故而知新，对 web storage，错误捕获和处理，观察者模式，tsconfig.json，package.json，node 等又有了更多的认识和思考
 
-如果这篇文章对你有帮助，请给我一个 star 吧，谢谢！
-<https://github.com/GM-Zhou/easy-web-storage>
+如果这篇文章对你有帮助，请给我一个 [start](<https://github.com/GM-Zhou/easy-web-storage>
+) 吧，谢谢！
